@@ -2,10 +2,10 @@
 
 const store = {
   items: [
-    { id: cuid(), name: 'apples', checked: false},
-    { id: cuid(), name: 'oranges', checked: false},
-    { id: cuid(), name: 'milk', checked: true },
-    { id: cuid(), name: 'bread', checked: false }
+    { id: cuid(), name: 'apples', checked: false, editedName: false },
+    { id: cuid(), name: 'oranges', checked: false, editedName: false },
+    { id: cuid(), name: 'milk', checked: true, editedName: false },
+    { id: cuid(), name: 'bread', checked: false, editedName: false }
   ],
   hideCheckedItems: false,
   itemsEdited: false
@@ -153,21 +153,25 @@ const handleToggleFilterClick = function () {
 
 
 
-const handleEditItemClick = function (){
- 
-  $('.js-shopping-list').on('click', '.js-item-edit', function() {
-     console.log(`edit button clicked event.currentTarget = ${event.currentTarget}` );
-     $(event.target).closest('li').children('span').html(`
+const handleEditItemClick = function () {
+  $('.js-shopping-list').on('click', '.js-item-edit', function () {
+    console.log(`edit button clicked event.currentTarget = ${event.currentTarget} and event.target = ${event.target}`);
+    if ($(event.target).closest('li').children('.shopping-item').hasClass('shopping-item__checked')) {
+      console.log('has the class');
+      alert('Sorry, you cannot edit a checked shopping list item!');
+    } else {
+      $(event.target).closest('li').children('span').html(`
      <form id="edit-item-form">
       <label for="edit-entry">Edit Item Name</label>
       <input type="text" name="edit-entry" class="js-edit-shopping-item-name" placeholder="">
       <button type="submit">Save</button>
     </form>
-     `)
-  
-  })
+     `);
+    }
 
-}
+  });
+
+};
 
 /**
  * This function will be our callback when the
