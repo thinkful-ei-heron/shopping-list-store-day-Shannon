@@ -2,13 +2,12 @@
 
 const store = {
   items: [
-    { id: cuid(), name: 'apples', checked: false, editedName: '', edited: false},
+    { id: cuid(), name: 'apples', checked: false, editedName: '', edited: false },
     { id: cuid(), name: 'oranges', checked: false, editedName: '', edited: false, },
-    { id: cuid(), name: 'milk', checked: true, editedName: '' , edited: false,},
+    { id: cuid(), name: 'milk', checked: true, editedName: '', edited: false, },
     { id: cuid(), name: 'bread', checked: false, editedName: '', edited: false, }
   ],
   hideCheckedItems: false,
-  itemsEdited: false
 };
 
 const generateItemElement = function (item) {
@@ -18,15 +17,15 @@ const generateItemElement = function (item) {
      <span class='shopping-item'>${item.name}</span>
     `;
   }
-  if(item.edited) {
+  if (item.edited) {
     itemTitle = `<span class='shopping-item shopping-item__checked'>${item.editedName}</span>`;
     if (!item.checked) {
       itemTitle = `
       <span class='shopping-item'>${item.editedName}</span>
     `;
-    } 
+    }
   }
- 
+
 
   return `
     <li class='js-item-element' data-item-id='${item.id}'>
@@ -160,18 +159,22 @@ const handleToggleFilterClick = function () {
   });
 };
 
+const findObjectByMatchedId = function (id) {
+  let matchedObject = store.items.find(obj => obj.id === id);
+  return matchedObject;
+};
 
 const handleEditItemClick = function () {
   $('.js-shopping-list').on('click', '.js-item-edit', function () {
-    console.log(`edit button clicked event.currentTarget = ${event.currentTarget} and event.target = ${event.target}`);
     if ($(event.target).closest('li').children('.shopping-item').hasClass('shopping-item__checked')) {
-      console.log('has the class');
       alert('Sorry, you cannot edit a checked shopping list item!');
     } else {
+      let currentItemId = getItemIdFromElement(event.target);
+      let currentObject = findObjectByMatchedId(currentItemId);
       $(event.target).closest('li').children('span').html(`
       <form id="edit-item-form">
       <label for="edit-entry">Edit Item Name</label>
-      <input type="text" name="edit-entry" class="js-edit-shopping-item-name" placeholder="">
+      <input type="text" name="edit-entry" class="js-edit-shopping-item-name" value="${currentObject.edited ? currentObject.editedName : currentObject.name}">
       <button type="submit">Save</button>
       </form>
       `);
@@ -179,26 +182,19 @@ const handleEditItemClick = function () {
   });
 };
 
-const changeItemStatusToEdited = function(id) {
- let matchedObject= store.items.find(obj => obj.id === id);
- matchedObject.edited = true;
- return matchedObject;
-}
-
 const handleEditItemSubmitEvent = function () {
-  $('.js-shopping-list').on('submit', '#edit-item-form', function() {
+  $('.js-shopping-list').on('submit', '#edit-item-form', function () {
     event.preventDefault();
     let editedName = $('.js-edit-shopping-item-name').val();
     $('.js-edit-shopping-item-name').val('');
     let editedItemId = getItemIdFromElement(event.target);
-    console.log(editedItemId);
-    let currentObject = changeItemStatusToEdited(editedItemId);
+    let currentObject = findObjectByMatchedId(editedItemId);
     currentObject.editedName = editedName;
-    console.log(currentObject);
+    currentObject.edited = true;
     render();
   }
-  )
-}
+  );
+};
 
 /**
  * This function will be our callback when the
