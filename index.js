@@ -1,11 +1,14 @@
+'use strict';
+
 const store = {
   items: [
-    { id: cuid(), name: 'apples', checked: false },
-    { id: cuid(), name: 'oranges', checked: false },
+    { id: cuid(), name: 'apples', checked: false},
+    { id: cuid(), name: 'oranges', checked: false},
     { id: cuid(), name: 'milk', checked: true },
     { id: cuid(), name: 'bread', checked: false }
   ],
-  hideCheckedItems: false
+  hideCheckedItems: false,
+  itemsEdited: false
 };
 
 const generateItemElement = function (item) {
@@ -25,6 +28,9 @@ const generateItemElement = function (item) {
         </button>
         <button class='shopping-item-delete js-item-delete'>
           <span class='button-label'>delete</span>
+        </button>
+        <button class='shopping-item-edit js-item-edit'>
+          <span class='button-label'>edit</span>
         </button>
       </div>
     </li>`;
@@ -145,6 +151,18 @@ const handleToggleFilterClick = function () {
   });
 };
 
+
+
+const handleEditItemClick = function (){
+ 
+  $('.js-shopping-list').on('click', '.js-item-edit', function() {
+     console.log(`edit button clicked event.currentTarget = ${event.currentTarget}` );
+     $(event.target).closest('li').children('span').html(`Did this work?`)
+  
+  })
+
+}
+
 /**
  * This function will be our callback when the
  * page loads. It is responsible for initially 
@@ -160,6 +178,7 @@ const handleShoppingList = function () {
   handleItemCheckClicked();
   handleDeleteItemClicked();
   handleToggleFilterClick();
+  handleEditItemClick();
 };
 
 // when the page loads, call `handleShoppingList`
