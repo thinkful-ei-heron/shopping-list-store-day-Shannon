@@ -165,29 +165,29 @@ const findObjectByMatchedId = function (id) {
 };
 
 const handleEditItemClick = function () {
-  $('.js-shopping-list').on('click', '.js-item-edit', function () {
-    if ($(event.target).closest('li').children('.shopping-item').hasClass('shopping-item__checked')) {
+  $('.js-shopping-list').on('click', '.js-item-edit', function(event) {
+    if ($(event.currentTarget).closest('li').children('.shopping-item').hasClass('shopping-item__checked')) {
       alert('Sorry, you cannot edit a checked shopping list item!');
     } else {
-      let currentItemId = getItemIdFromElement(event.target);
+      let currentItemId = getItemIdFromElement(event.currentTarget);
       let currentObject = findObjectByMatchedId(currentItemId);
-      $(event.target).closest('li').children('span').html(`
+      $(event.currentTarget).closest('li').children('span').html(`
       <form id="edit-item-form">
       <label for="edit-entry">Edit Item Name</label>
       <input type="text" name="edit-entry" class="js-edit-shopping-item-name" value="${currentObject.edited ? currentObject.editedName : currentObject.name}">
-      <button type="submit">Save</button>
+      <button type="submit" class = "js-submit-edits">Save</button>
       </form>
       `);
     }
   });
 };
 
-const handleEditItemSubmitEvent = function () {
-  $('.js-shopping-list').on('submit', '#edit-item-form', function () {
+const handleEditItemSubmitEvent = function() {
+  $('.js-shopping-list').on('submit', '#edit-item-form', function (event){
     event.preventDefault();
     let editedName = $('.js-edit-shopping-item-name').val();
     $('.js-edit-shopping-item-name').val('');
-    let editedItemId = getItemIdFromElement(event.target);
+    let editedItemId = getItemIdFromElement(event.currentTarget);
     let currentObject = findObjectByMatchedId(editedItemId);
     currentObject.editedName = editedName;
     currentObject.edited = true;
