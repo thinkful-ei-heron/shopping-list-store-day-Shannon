@@ -160,8 +160,8 @@ const handleEditItemClick = function (){
      $(event.target).closest('li').children('span').html(`
      <form id="edit-item-form">
       <label for="edit-entry">Edit Item Name</label>
-      <input type="text" name="edit-entry" class="js-edit-shopping-item-name" placeholder="edit item name here">
-      <button type="submit">Edit item</button>
+      <input type="text" name="edit-entry" class="js-edit-shopping-item-name" placeholder="">
+      <button type="submit">Save</button>
     </form>
      `)
   
